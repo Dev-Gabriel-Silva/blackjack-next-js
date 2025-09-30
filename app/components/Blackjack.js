@@ -1,7 +1,8 @@
 'use client'
+
 import { useEffect, useState } from "react";
-import Hand from "./Hand";
 import StartNewGame from "./StartNewGame";
+import Game from "./Game";
 
 export default function Blackjack() {
     const [ isPlaying, setNewGame ] = useState(false); // Cria um estado para armazenar se está ocorrendo um jogo no momento
@@ -27,14 +28,14 @@ export default function Blackjack() {
         const { deck_id } = decks;
         const response = await fetch(`https://deckofcardsapi.com/api/deck/${ deck_id }/draw/?count=${2}`); // Request draw 2 cards, default on Blackjack
         const data = await response.json(); // Converte a resposta para json
-        setCardHand(data); // Salva o estado da mão
+        setCardHand(data.cards); // Salva o estado da mão
     }
 
     return ( 
         <div
             className="h-dvh w-dvw flex flex-col items-center justify-center"
         >
-                { isPlaying && cardHand ? <Hand hand={cardHand} /> : <StartNewGame setNewGame={ () => start() }/>}
+                { isPlaying && cardHand ? <Game cardHand={ cardHand } setCardHand={ setCardHand } decks={ decks } /> : <StartNewGame setNewGame={ () => start() }/>}
         </div>
     )
 }
