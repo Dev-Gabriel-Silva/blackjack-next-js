@@ -1,8 +1,12 @@
 'use client'
 import { useEffect, useState } from "react";
+import Hand from "./Hand";
+import StartNewGame from "./StartNewGame";
 
 export default function Blackjack() {
-    const [ decks, setDecks ] = useState({})
+    const [ isPlaying, setNewGame ] = useState(false); // Cria um estado para armazenar se está ocorrendo um jogo no momento
+    const [ decks, setDecks ] = useState({}); // Cria um estado para armazenar o deck durante a fase de montagem e pós requisição
+    const [ cardHand, setCardHand ] = useState(false); // Cria estado para armazenar mão de cartas
 
     useEffect(() => {
         newDeck();
@@ -14,25 +18,23 @@ export default function Blackjack() {
         setDecks(data);
     }
 
+    async function start() {
+        setNewGame(true);
+        drawHand();
+    }
+
+    async function drawHand() {
+        const { deck_id } = decks;
+        const response = await fetch(`https://deckofcardsapi.com/api/deck/${ deck_id }/draw/?count=${2}`); // Request draw 2 cards, default on Blackjack
+        const data = await response.json(); // Converte a resposta para json
+        setCardHand(data); // Salva o estado da mão
+    }
+
     return ( 
         <div
             className="h-dvh w-dvw flex flex-col items-center justify-center"
         >
-            <h1
-                className="text-4xl"
-            >
-                BLACKJACK 🃏
-            </h1>
-            <p
-                className="text-2xl m-6"
-            >
-                New Game?
-            </p>
-            <button
-                className="p-2 bg-green-500 hover:bg-green-700 text-white m-5"
-            >
-                Start
-            </button>
+                { isPlaying && cardHand ? <Hand hand={cardHand} /> : <StartNewGame setNewGame={ () => start() }/>}
         </div>
     )
 }
