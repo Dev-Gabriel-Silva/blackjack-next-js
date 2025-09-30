@@ -1,5 +1,11 @@
 
 export default function Blackjack() {
+
+    async function newDeck() {
+        const result = await fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${1}`);
+        const data = await result.json();
+    }
+
     return ( 
         <div
             className="h-dvh w-dvw flex flex-col items-center justify-center"
