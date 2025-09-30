@@ -1,9 +1,17 @@
+'use client'
+import { useEffect, useState } from "react";
 
 export default function Blackjack() {
+    const [ decks, setDecks ] = useState({})
+
+    useEffect(() => {
+        newDeck();
+    },[])
 
     async function newDeck() {
         const result = await fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${1}`);
         const data = await result.json();
+        setDecks(data);
     }
 
     return ( 
