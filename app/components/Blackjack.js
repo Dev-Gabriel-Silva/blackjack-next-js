@@ -9,12 +9,13 @@ export default function Blackjack() {
     const [ decks, setDecks ] = useState({}); // Cria um estado para armazenar o deck durante a fase de montagem e pós requisição
     const [ cardHand, setCardHand ] = useState(false); // Cria estado para armazenar mão de cartas
 
+
     useEffect(() => {
         newDeck();
     },[])
 
     async function newDeck() {
-        const result = await fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${1}`);
+        const result = await fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${6}`);
         const data = await result.json();
         setDecks(data);
     }
@@ -35,7 +36,7 @@ export default function Blackjack() {
         <div
             className="h-dvh w-dvw flex flex-col items-center justify-center"
         >
-                { isPlaying && cardHand ? <Game cardHand={ cardHand } setCardHand={ setCardHand } decks={ decks } /> : <StartNewGame setNewGame={ () => start() }/>}
+                { isPlaying && cardHand ? <Game cardHand={ cardHand } setCardHand={ setCardHand } decks={ decks }  setNewGame={setNewGame} isPlaying={ isPlaying }/> : <StartNewGame setNewGame={ () => start() }/>}
         </div>
     )
 }
